@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "207999719541",
+    "project_id": "fire-pulpo-proyecto-bit-2021",
+    "storage_bucket": "fire-pulpo-proyecto-bit-2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207999719541:android:03c11d7b0b6919cc9f803c",
+        "android_client_info": {
+          "package_name": "com.bit.bitproyectofinalpulpo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207999719541-mhj1075o6monf7e0t6kga09buvt50g3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASbncK1On6CJbWsWHZVrm4OXTEE_x4fE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207999719541-mhj1075o6monf7e0t6kga09buvt50g3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
