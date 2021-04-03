@@ -20,7 +20,18 @@ class HomeActivity : AppCompatActivity() {
         val homeFragment = HomeFragment()
         val storeFragment = StoreFragment()
         val profileFragment = ProfileFragment()
+
+        //obtengo mail del activity y lo paso al fragment de profile
+        val bundle = intent.extras
+        val email = bundle?.getString("email")
+        val args = Bundle()
+        //println("other message " + email)
+        args.putString("email", email)
+        profileFragment.arguments = args
+
+
         makeFragment(homeFragment)
+
 
         bottom_navigation.setOnNavigationItemSelectedListener {
             when(it.itemId){
