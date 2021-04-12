@@ -1,5 +1,6 @@
 package com.bit.bitproyectofinalpulpo.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bit.bitproyectofinalpulpo.R
 import kotlinx.android.synthetic.main.fragment_survey.*
+import kotlinx.android.synthetic.main.survey_complete.view.*
 
 
 class SurveyFragment : Fragment() {
@@ -64,12 +66,14 @@ class SurveyFragment : Fragment() {
                 // el numero despues del == es siempre +1  la cantidad de preguntas
                 // es decir que si pongo == 11 son 10 preguntas
                 if ((nroPregunta.toInt() +1) == 3){
-                    val fragment = HomeFragment()
-                    val fragmentManager = activity!!.supportFragmentManager
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.replace(R.id.fragmentContainer, fragment)
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
+                    val miDialogView  = LayoutInflater.from(this.context).inflate(R.layout.survey_complete, null)
+                    val mBuilder = AlertDialog.Builder(this.context).setView(miDialogView).setTitle("¡FELICITACIONES!")
+                    miDialogView.findViewById<TextView>(R.id.textViewModal).text = "Completaste la encuesta y generaste 10 coins"
+                    val mAlertDialog  = mBuilder.show()
+                    miDialogView.buttonModal.setOnClickListener(){
+                        mAlertDialog.dismiss()
+                        cerrarEncuesta()
+                    }
                 }else{
                     setPregunta(view, encuestaId, nroPregunta.toInt() +1)
                 }
@@ -91,6 +95,15 @@ class SurveyFragment : Fragment() {
     }
     private fun guardarRespuesta(encuestaId: String, respuesta: Int){
         println("other message GUARDO LA RESPUESTA EN FIREBASE " + encuestaId + " -- " + respuesta)
+    }
+
+    private fun cerrarEncuesta(){
+        val fragment = HomeFragment()
+        val fragmentManager = activity!!.supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentContainer, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 
 }
