@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".fragments.SurveyFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewPruebaID"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Este es el id" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:id="@+id/textViewTituloPregunta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="PREGUNTA"
+            tools:text="PREGUNTA" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/CardViewUno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:id="@+id/textViewPregUno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroupRespUno"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RadioButton
+                        android:id="@+id/radioButtonUno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Respuesta 1"
+                        tools:text="Respuesta 1" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonDos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Respuesta 2"
+                        tools:text="Respuesta 2" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonTres"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Respuesta 3"
+                        tools:text="Respuesta 3" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonCuatro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Respuesta 4"
+                        tools:text="Respuesta 4" />
+                </RadioGroup>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/buttonEnviarRespuesta"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Enviar respuesta"
+            tools:text="Enviar respuesta" />
+
+        <TextView
+            android:id="@+id/textViewNroPregunta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:visibility="invisible"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/textViewRespVacia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Por favor seleccione una respuesta"
+            android:visibility="invisible"
+            tools:text="Por favor seleccione una respuesta" />
+
+    </LinearLayout>
+
+</FrameLayout>

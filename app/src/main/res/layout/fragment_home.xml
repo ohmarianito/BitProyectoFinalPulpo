@@ -9,11 +9,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <TextView
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:text="Home" />
-    </RelativeLayout>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Home" />
+
+        <Button
+            android:id="@+id/buttonEncuesta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ir Encuesta"
+            tools:text="Ir Encuesta" />
+
+    </LinearLayout>
 
 </FrameLayout>
