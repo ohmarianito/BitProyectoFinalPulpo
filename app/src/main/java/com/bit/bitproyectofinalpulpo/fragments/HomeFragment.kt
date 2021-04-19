@@ -19,12 +19,15 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         val btnEncuesta  = view.findViewById<View>(R.id.buttonEncuesta) as Button
+        // obtengo mail
+        val userEmail = requireArguments().getString("email")
 
         btnEncuesta.setOnClickListener(){
             val args = Bundle()
-            val id = "444444"
+            val id = "1"
             val fragment = SurveyFragment()
             args.putString("encuestaId", id)
+            args.putString("email", userEmail)
             fragment.arguments = args
             val fragmentManager = activity!!.supportFragmentManager
             val fragmentTransaction = fragmentManager.beginTransaction()

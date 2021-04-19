@@ -28,7 +28,8 @@ class HomeActivity : AppCompatActivity() {
         //println("other message " + email)
         args.putString("email", email)
         profileFragment.arguments = args
-
+        homeFragment.arguments = args
+        storeFragment.arguments = args
 
         makeFragment(homeFragment)
 

@@ -1,6 +1,7 @@
 package com.bit.bitproyectofinalpulpo.fragments
 
 import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +9,24 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.bit.bitproyectofinalpulpo.R
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_survey.*
 import kotlinx.android.synthetic.main.survey_complete.view.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class SurveyFragment : Fragment() {
+    private val db = FirebaseFirestore.getInstance()
+    var preguntas : HashMap<Int, String>
+            = HashMap<Int, String> ()
+    var coinsEnJuego = 0
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,15 +40,19 @@ class SurveyFragment : Fragment() {
         //println("other message " + encuestaId)
         view.findViewById<TextView>(R.id.textViewPruebaID).text = "id de la encuesta: " + encuestaId
 
+        // obtengo mail
+        val userEmail = requireArguments().getString("email").toString()
+
         if (encuestaId != null) {
-            setPregunta(view, encuestaId, 1)
-            siguienteResp(view, encuestaId)
+            obtenerPreguntas(view, encuestaId)
+            siguienteResp(view, encuestaId, userEmail)
         }
 
         return view
     }
 
-    private fun siguienteResp(view: View, encuestaId: String){
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun siguienteResp(view: View, encuestaId: String, email: String){
         val btnEnviarEncuesta  = view.findViewById<View>(R.id.buttonEnviarRespuesta) as Button
         btnEnviarEncuesta.setOnClickListener(){
 
@@ -48,7 +63,7 @@ class SurveyFragment : Fragment() {
                 val radioButton: View = radioGroupRespUno.findViewById(radioButtonID)
                 //aca obtengo el indice QUE VA DEL 0 al 3 SON 4 POSICIONES
 
-                val idx: Int = radioGroupRespUno.indexOfChild(radioButton)
+                val respuestaRadio: Int = radioGroupRespUno.indexOfChild(radioButton)
 
                 val selectedRadioButton = view.findViewById<RadioButton>(radioButtonID)
 
@@ -60,19 +75,19 @@ class SurveyFragment : Fragment() {
                 //Consulto el numero de pregunta que voy a tener q IR a buscar de la encuesta
                 val nroPregunta = view.findViewById<TextView>(R.id.textViewNroPregunta).text.toString()
 
-                guardarRespuesta(encuestaId, idx)
+                guardarRespuesta(encuestaId, respuestaRadio, email, nroPregunta)
 
                 //controlo ultima pregunta y muestro finalizar o siguiente pregunta
                 // el numero despues del == es siempre +1  la cantidad de preguntas
                 // es decir que si pongo == 11 son 10 preguntas
-                if ((nroPregunta.toInt() +1) == 3){
+                if (nroPregunta.toInt() == preguntas.size ){
                     val miDialogView  = LayoutInflater.from(this.context).inflate(R.layout.survey_complete, null)
                     val mBuilder = AlertDialog.Builder(this.context).setView(miDialogView).setTitle("¡FELICITACIONES!")
-                    miDialogView.findViewById<TextView>(R.id.textViewModal).text = "Completaste la encuesta y generaste 10 coins"
+                    miDialogView.findViewById<TextView>(R.id.textViewModal).text = "Completaste la encuesta y generaste " + coinsEnJuego + " coins!"
                     val mAlertDialog  = mBuilder.show()
                     miDialogView.buttonModal.setOnClickListener(){
                         mAlertDialog.dismiss()
-                        cerrarEncuesta()
+                        cerrarEncuesta(email)
                     }
                 }else{
                     setPregunta(view, encuestaId, nroPregunta.toInt() +1)
@@ -82,23 +97,78 @@ class SurveyFragment : Fragment() {
             }
         }
     }
+    private fun obtenerPreguntas(view: View, encuestaId: String){
+
+        db.collection("encuestas").document(encuestaId).get().addOnSuccessListener{
+            coinsEnJuego = it.get("encuestaMonedas").toString().toInt()
+        }
+
+        db.collection("encuestas").document(encuestaId)
+            .collection("encuestaPreguntas").get().addOnSuccessListener{document ->
+                if (document != null) {
+                    println("other message TRAJO Preguntas ")
+                    var i = 0
+                    while ( i < document.documents.size){
+                        //tamaño de preguntas
+                        val idPregu : Int = document.documents.get(i).data?.get("encuestaPreguntaId").toString().toInt()
+                        val pregu = document.documents.get(i).data?.get("encuestaPreguntaDescripcion").toString()
+                        preguntas.put(idPregu, pregu)
+                        i++
+                    }
+                    setPregunta(view, encuestaId, 1)
+                } else {
+                    println("other message ERROR AL TRAER PREGUNTA")
+                }
+            }
+    }
     private fun setPregunta(view: View, encuestaId: String, proximaPregu: Int){
-        println("other message PREGUNTA NUMEROOO " + proximaPregu)
-        //voy a buscar la pregunta a firebase y seteo los campos con el numero de pregunta
-        view.findViewById<TextView>(R.id.textViewPregUno).text = "esto viene de firebase con la pregunta: " + proximaPregu
-        view.findViewById<RadioButton>(R.id.radioButtonUno).text = "PRUEBA" + proximaPregu
-        view.findViewById<RadioButton>(R.id.radioButtonDos).text = "PRUEBA" + proximaPregu
-        view.findViewById<RadioButton>(R.id.radioButtonTres).text = "PRUEBA" + proximaPregu
-        view.findViewById<RadioButton>(R.id.radioButtonCuatro).text = "PRUEBA" + proximaPregu
-        view.findViewById<RadioButton>(R.id.radioButtonCuatro).text = "PRUEBA" + proximaPregu
+        view.findViewById<RadioButton>(R.id.radioButtonUno).isChecked = false
+        view.findViewById<RadioButton>(R.id.radioButtonDos).isChecked = false
+        view.findViewById<RadioButton>(R.id.radioButtonTres).isChecked = false
+        view.findViewById<RadioButton>(R.id.radioButtonCuatro).isChecked = false
+        radioGroupRespUno.clearCheck()
+
+        db.collection("encuestas").document(encuestaId)
+            .collection("encuestaPreguntas").document(proximaPregu.toString())
+                .collection("encuestaPreguntaOpciones").get().addOnSuccessListener{ document ->
+                if (document != null) {
+                    println("other message PREGUNTA NUMEROOO " + proximaPregu)
+                    //voy a buscar la pregunta a firebase y seteo los campos con el numero de pregunta
+                    view.findViewById<TextView>(R.id.textViewPregUno).text = preguntas.get(proximaPregu)
+                    view.findViewById<RadioButton>(R.id.radioButtonUno).text = document.documents.get(0).data?.get("encuestaPreguntaOpcionDsc").toString()
+                    view.findViewById<RadioButton>(R.id.radioButtonDos).text = document.documents.get(1).data?.get("encuestaPreguntaOpcionDsc").toString()
+                    view.findViewById<RadioButton>(R.id.radioButtonTres).text = document.documents.get(2).data?.get("encuestaPreguntaOpcionDsc").toString()
+                    view.findViewById<RadioButton>(R.id.radioButtonCuatro).text = document.documents.get(3).data?.get("encuestaPreguntaOpcionDsc").toString()
+                } else {
+                    println("other message ERROR AL TRAER ReSPUESTAS")
+                }
+        }
+        println("other message LLEGAA ACAAC")
         view.findViewById<TextView>(R.id.textViewNroPregunta).text = proximaPregu.toString()
     }
-    private fun guardarRespuesta(encuestaId: String, respuesta: Int){
-        println("other message GUARDO LA RESPUESTA EN FIREBASE " + encuestaId + " -- " + respuesta)
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun guardarRespuesta(encuestaId: String, respuesta: Int, email: String, nroPregu: String){
+        //println("other message GUARDO LA RESPUESTA EN FIREBASE " + encuestaId + " -- " + respuesta)
+        val now = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy")
+        val formatted = now.format(formatter)
+        val documentID = "$email-$formatted"
+        db.collection("respuestas").document(documentID).set(
+            hashMapOf(
+                "encuestaId" to encuestaId,
+                "encuestaPreguntaId" to nroPregu,
+                "encuestaPreguntaOpcionId" to respuesta+1,
+                "usuarioId" to email)
+        )
     }
 
-    private fun cerrarEncuesta(){
+    private fun cerrarEncuesta(email: String){
+        val args = Bundle()
+        args.putString("email", email)
+        println("other message LLEGA AL CERRARRRRR")
         val fragment = HomeFragment()
+        fragment.arguments = args
         val fragmentManager = activity!!.supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentContainer, fragment)
