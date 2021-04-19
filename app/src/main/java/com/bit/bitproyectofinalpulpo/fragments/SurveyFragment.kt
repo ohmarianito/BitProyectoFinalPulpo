@@ -106,7 +106,7 @@ class SurveyFragment : Fragment() {
         db.collection("encuestas").document(encuestaId)
             .collection("encuestaPreguntas").get().addOnSuccessListener{document ->
                 if (document != null) {
-                    println("other message TRAJO Preguntas ")
+                    //println("other message TRAJO Preguntas ")
                     var i = 0
                     while ( i < document.documents.size){
                         //tamaño de preguntas
@@ -143,7 +143,7 @@ class SurveyFragment : Fragment() {
                     println("other message ERROR AL TRAER ReSPUESTAS")
                 }
         }
-        println("other message LLEGAA ACAAC")
+        //println("other message LLEGAA ACAAC")
         view.findViewById<TextView>(R.id.textViewNroPregunta).text = proximaPregu.toString()
     }
 
@@ -153,7 +153,8 @@ class SurveyFragment : Fragment() {
         val now = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy")
         val formatted = now.format(formatter)
-        val documentID = "$email-$formatted"
+        println("other message RESPUESTAAAAAAA " + respuesta)
+        val documentID = "$email-($nroPregu)-$formatted"
         db.collection("respuestas").document(documentID).set(
             hashMapOf(
                 "encuestaId" to encuestaId,
