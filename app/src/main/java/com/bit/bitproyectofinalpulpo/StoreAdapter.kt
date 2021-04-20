@@ -4,14 +4,19 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.bit.bitproyectofinalpulpo.fragments.StoreFragment
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.store_item.view.*
+import com.google.firebase.firestore.FirebaseFirestore
 
-class StoreAdapter(private val context: Context): RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
+
+class StoreAdapter(private val context: Context, val email: String, val money: Int): RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
 
     private var dataList = mutableListOf<Producto>()
+    private val db = FirebaseFirestore.getInstance()
 
     fun setListData(data:MutableList<Producto>) {
         dataList = data
@@ -31,11 +36,49 @@ class StoreAdapter(private val context: Context): RecyclerView.Adapter<StoreAdap
     }
 
     override fun onBindViewHolder(holder: StoreViewHolder, position: Int) {
-        val item = dataList[position]
+        var item = dataList[position]
         holder.bindView(item)
+        holder.button.setOnClickListener {
+            getDataFromFirebase(email, object: StoreFragment.CoinCallback {
+                override fun onCallback(coins: Int) {
+                    var monedas = coins.toInt()
+                    var productoValor = item.productoValor
+                    if (monedas >= productoValor) {
+                        var monedas_act = monedas - productoValor
+                        db.collection("usuarios").document(email).update("monedas", monedas_act)
+                        var msg = "Producto canjeado con exito"
+                        basicAlert(msg)
+                    } else {
+                        var msg = "No se puede canjear, saldo insuficiente"
+                        basicAlert(msg)
+
+                    }
+                }
+            } )
+
+        }
+
+    }
+
+    fun basicAlert(msg: String){
+
+        val ad =
+            AlertDialog.Builder(context)
+        ad.setTitle(msg)
+        ad.setPositiveButton(
+            "OK"
+        ) { dialog, id -> dialog.dismiss() }
+        ad.show()
+
+
+
+
+
+
     }
 
     inner class StoreViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
+        val button = itemView.findViewById<Button>(R.id.boton_canjear)
         fun bindView(item:Producto){
             Glide.with(context).load(item.productoURL).into(itemView.findViewById(R.id.card_view_image))
             itemView.findViewById<TextView>(R.id.productName).text = item.productoNombre
@@ -43,6 +86,19 @@ class StoreAdapter(private val context: Context): RecyclerView.Adapter<StoreAdap
             itemView.findViewById<TextView>(R.id.productValue).text = value
         }
     }
+
+    private fun getDataFromFirebase(email: String, myCallback: StoreFragment.CoinCallback){
+        // al cargar el fragment va a buscar la info
+        db.collection("usuarios").document(email).get().addOnSuccessListener {
+            var coins = (it.get("monedas") as Long?).toString().toInt()
+            myCallback.onCallback(coins)
+        }
+    }
+
+    interface CoinCallback {
+        fun onCallback(value: Int)
+    }
+
 
 
 }
