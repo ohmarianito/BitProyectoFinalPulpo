@@ -37,8 +37,10 @@ class SurveyFragment : Fragment() {
         view.findViewById<TextView>(R.id.textViewRespVacia).visibility = View.INVISIBLE
 
         val encuestaId = requireArguments().getString("encuestaId")
-        //println("other message " + encuestaId)
-        view.findViewById<TextView>(R.id.textViewPruebaID).text = "id de la encuesta: " + encuestaId
+        val encuestaTitulo = requireArguments().getString("encuestaTitulo")
+
+        println("other message LLEGA A PREGUNTAS ENCUESTAS " + encuestaId + " " + encuestaTitulo)
+        view.findViewById<TextView>(R.id.textViewPruebaID).text = encuestaTitulo
 
         // obtengo mail
         val userEmail = requireArguments().getString("email").toString()

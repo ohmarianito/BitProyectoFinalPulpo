@@ -30,6 +30,11 @@
             android:text="Ir Encuesta"
             tools:text="Ir Encuesta" />
 
+        <ListView
+            android:id="@+id/listaEncuestas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 
 </FrameLayout>
