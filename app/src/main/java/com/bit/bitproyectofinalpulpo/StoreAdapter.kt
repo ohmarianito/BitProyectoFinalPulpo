@@ -1,5 +1,6 @@
 package com.bit.bitproyectofinalpulpo
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class StoreAdapter(private val context: Context, val email: String, val money: Int): RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
+class StoreAdapter(private val context: Context, val email: String, val view: View): RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
 
     private var dataList = mutableListOf<Producto>()
     private val db = FirebaseFirestore.getInstance()
@@ -46,6 +47,7 @@ class StoreAdapter(private val context: Context, val email: String, val money: I
                     if (monedas >= productoValor) {
                         var monedas_act = monedas - productoValor
                         db.collection("usuarios").document(email).update("monedas", monedas_act)
+                        actualizarMonedas(monedas_act.toInt())
                         var msg = "Producto canjeado con exito"
                         basicAlert(msg)
                     } else {
@@ -70,11 +72,10 @@ class StoreAdapter(private val context: Context, val email: String, val money: I
         ) { dialog, id -> dialog.dismiss() }
         ad.show()
 
+    }
 
-
-
-
-
+    private fun actualizarMonedas(monedas: Int) {
+        view.findViewById<TextView>(R.id.store_coins).text = monedas.toString()
     }
 
     inner class StoreViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
@@ -98,6 +99,8 @@ class StoreAdapter(private val context: Context, val email: String, val money: I
     interface CoinCallback {
         fun onCallback(value: Int)
     }
+
+
 
 
 

@@ -47,7 +47,7 @@ class StoreFragment : Fragment() {
             email = userEmail
         }
 
-        adapter = StoreAdapter(context!!, email, monedas)
+        adapter = StoreAdapter(context!!, email, view)
 
         var recyclerView = view.findViewById<RecyclerView>(R.id.rvStore)
 
@@ -79,6 +79,8 @@ class StoreFragment : Fragment() {
             view.findViewById<TextView>(R.id.store_coins).text = (it.get("monedas") as Long?).toString()
         }
     }
+
+
 
     private fun getDataFromFirebase(email: String, myCallback:CoinCallback){
         // al cargar el fragment va a buscar la info
