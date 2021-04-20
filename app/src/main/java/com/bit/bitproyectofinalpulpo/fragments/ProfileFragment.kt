@@ -90,6 +90,13 @@ class ProfileFragment : Fragment() {
                     "pais" to pais,
                     "depto" to depto)
             )
+
+            view.findViewById<TextView>(R.id.editTextName).text = nombre
+            view.findViewById<TextView>(R.id.editTextSurname).text = apellido
+            view.findViewById<TextView>(R.id.editTextPhone).text = nroCell
+            view.findViewById<TextView>(R.id.editTextDate).text = fecha
+            view.findViewById<TextView>(R.id.editTextCountry).text = pais
+            view.findViewById<TextView>(R.id.editTextDepartment).text = depto
         }
     }
 }
