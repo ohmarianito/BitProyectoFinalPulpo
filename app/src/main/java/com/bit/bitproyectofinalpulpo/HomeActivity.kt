@@ -4,17 +4,22 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bit.bitproyectofinalpulpo.fragments.HomeFragment
 import com.bit.bitproyectofinalpulpo.fragments.ProfileFragment
 import com.bit.bitproyectofinalpulpo.fragments.StoreFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.fragment_store.*
+
+//private lateinit var adapter:StoreAdapter
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
 
         //Navegacion fragments
         val homeFragment = HomeFragment()
@@ -42,6 +47,9 @@ class HomeActivity : AppCompatActivity() {
             }
             true
         }
+
+
+
         start()
     }
 
