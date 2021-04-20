@@ -39,7 +39,8 @@ class ProductoAdapter(private val context: Context): RecyclerView.Adapter <Produ
         fun bindView(producto: Producto){
             Glide.with(context).load(producto.productoURL).into(itemView.card_view_image)
             itemView.findViewById<TextView>(R.id.productName).text = producto.productoNombre
-            itemView.findViewById<TextView>(R.id.productValue).text = producto.productoValor
+            val value = producto.productoValor.toString()
+            itemView.findViewById<TextView>(R.id.productValue).text = value
         }
     }
 }

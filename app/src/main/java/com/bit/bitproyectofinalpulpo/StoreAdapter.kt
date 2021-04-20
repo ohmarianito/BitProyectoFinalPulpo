@@ -39,7 +39,8 @@ class StoreAdapter(private val context: Context): RecyclerView.Adapter<StoreAdap
         fun bindView(item:Producto){
             Glide.with(context).load(item.productoURL).into(itemView.findViewById(R.id.card_view_image))
             itemView.findViewById<TextView>(R.id.productName).text = item.productoNombre
-            itemView.findViewById<TextView>(R.id.productValue).text = item.productoValor
+            val value = (item.productoValor).toString()
+            itemView.findViewById<TextView>(R.id.productValue).text = value
         }
     }
 

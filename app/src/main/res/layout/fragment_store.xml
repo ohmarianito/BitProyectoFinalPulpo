@@ -38,14 +38,27 @@
                 android:textColor="#000"
                 android:textSize="24sp"
                 android:id="@+id/store_header_title"/>
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="Monedas disponibles: 100"
-                android:textColor="#000"
-                android:textSize="16sp"
-                android:layout_below="@+id/store_header_title"/>
+                android:orientation="horizontal"
+                android:layout_below="@+id/store_header_title">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Monedas disponibles: "
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:id="@+id/store_header_subtitle"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:id="@+id/store_coins"/>
+            </LinearLayout>
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
