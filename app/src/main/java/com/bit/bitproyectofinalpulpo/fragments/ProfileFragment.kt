@@ -59,7 +59,7 @@ class ProfileFragment : Fragment() {
         // al cargar el fragment va a buscar la info
         db.collection("usuarios").document(userEmail).get().addOnSuccessListener {
             view.findViewById<TextView>(R.id.editTextName).text = it.get("nombre") as String?
-            view.findViewById<TextView>(R.id.editTextSurname).text = it.get("apeliido") as String?
+            view.findViewById<TextView>(R.id.editTextSurname).text = it.get("apellido") as String?
             view.findViewById<TextView>(R.id.editTextPhone).text = it.get("nroCell") as String?
             view.findViewById<TextView>(R.id.editTextDate).text = it.get("fecha") as String?
             view.findViewById<TextView>(R.id.editTextCountry).text = it.get("pais") as String?
@@ -70,7 +70,7 @@ class ProfileFragment : Fragment() {
         view.buttonUpdateData.setOnClickListener{
 
             val nombre = view.findViewById<EditText>(R.id.editTextName).text.toString()
-            val apeliido = view.findViewById<EditText>(R.id.editTextSurname).text.toString()
+            val apellido = view.findViewById<EditText>(R.id.editTextSurname).text.toString()
             val nroCell = view.findViewById<EditText>(R.id.editTextPhone).text.toString()
             val fecha = view.findViewById<EditText>(R.id.editTextDate).text.toString()
             val pais = view.findViewById<EditText>(R.id.editTextCountry).text.toString()
@@ -84,7 +84,7 @@ class ProfileFragment : Fragment() {
             db.collection("usuarios").document(userEmail).set(
                 hashMapOf(
                     "nombre" to nombre,
-                    "apeliido" to apeliido,
+                    "apellido" to apellido,
                     "nroCell" to nroCell,
                     "fecha" to fecha,
                     "pais" to pais,
