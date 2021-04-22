@@ -81,7 +81,7 @@ class ProfileFragment : Fragment() {
             // db es la conexion global
             // collection seria lo que es la tabla
             // en este caso usuarios es el id
-            db.collection("usuarios").document(userEmail).set(
+           /* db.collection("usuarios").document(userEmail).set(
                 hashMapOf(
                     "nombre" to nombre,
                     "apellido" to apellido,
@@ -89,7 +89,13 @@ class ProfileFragment : Fragment() {
                     "fecha" to fecha,
                     "pais" to pais,
                     "depto" to depto)
-            )
+            )*/
+            db.collection("usuarios").document(userEmail).update("nombre", nombre)
+            db.collection("usuarios").document(userEmail).update("apellido", apellido)
+            db.collection("usuarios").document(userEmail).update("nroCell", nroCell)
+            db.collection("usuarios").document(userEmail).update("fecha", fecha)
+            db.collection("usuarios").document(userEmail).update("pais", pais)
+            db.collection("usuarios").document(userEmail).update("depto", depto)
 
             view.findViewById<TextView>(R.id.editTextName).text = nombre
             view.findViewById<TextView>(R.id.editTextSurname).text = apellido
