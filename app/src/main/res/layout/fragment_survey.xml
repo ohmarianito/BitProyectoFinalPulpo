@@ -15,20 +15,25 @@
         <TextView
             android:id="@+id/textViewPruebaID"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             android:text="Este es el id"
-             />
+            android:textColor="@color/colorAccent" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="10dp"
+            android:background="@color/colorPrimary"
+            android:backgroundTint="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/textViewTituloPregunta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="PREGUNTA"
+            android:textColor="@color/colorAccent"
             tools:text="PREGUNTA" />
 
         <androidx.cardview.widget.CardView
@@ -67,6 +72,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Respuesta 1"
+                        android:checked="true"
+                        android:buttonTint="@color/colorPrimary"
                         tools:text="Respuesta 1" />
 
                     <RadioButton
@@ -74,6 +81,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Respuesta 2"
+                        android:buttonTint="@color/colorPrimary"
                         tools:text="Respuesta 2" />
 
                     <RadioButton
@@ -81,6 +89,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Respuesta 3"
+                        android:buttonTint="@color/colorPrimary"
                         tools:text="Respuesta 3" />
 
                     <RadioButton
@@ -88,6 +97,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Respuesta 4"
+                        android:buttonTint="@color/colorPrimary"
                         tools:text="Respuesta 4" />
                 </RadioGroup>
 
@@ -105,6 +115,7 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:backgroundTint="@color/colorPrimary"
             android:text="Enviar respuesta"
             tools:text="Enviar respuesta" />
 
