@@ -100,8 +100,6 @@ class HomeFragment : Fragment() {
             fragmentTransaction.replace(R.id.fragmentContainer, fragment)
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
-
-
         }
     }
 }
