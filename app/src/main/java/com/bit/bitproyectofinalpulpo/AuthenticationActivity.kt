@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_authentication.*
 
 class AuthenticationActivity : AppCompatActivity() {
@@ -42,6 +43,17 @@ class AuthenticationActivity : AppCompatActivity() {
                     .addOnCompleteListener{
 
                         if (it.isSuccessful){
+                            var placeholder = ""
+                            FirebaseFirestore.getInstance().collection("usuarios").document(emailEditText.text.toString()).set(
+                                hashMapOf(
+                                    "nombre" to placeholder,
+                                    "apellido" to placeholder,
+                                    "nroCell" to placeholder,
+                                    "fecha" to placeholder,
+                                    "pais" to placeholder,
+                                    "depto" to placeholder,
+                                    "monedas" to 0)
+                            )
                             showHome(it.result?.user?.email ?:"")
                         } else {
                             //ERROR
