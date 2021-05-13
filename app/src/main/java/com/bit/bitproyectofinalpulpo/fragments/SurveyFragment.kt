@@ -1,6 +1,8 @@
 package com.bit.bitproyectofinalpulpo.fragments
 
 import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,7 +26,7 @@ class SurveyFragment : Fragment() {
     var preguntas : HashMap<Int, String>
             = HashMap<Int, String> ()
     var coinsEnJuego = 0
-
+    var coinsDelUsuario = Long.MIN_VALUE
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -38,12 +40,24 @@ class SurveyFragment : Fragment() {
 
         val encuestaId = requireArguments().getString("encuestaId")
         val encuestaTitulo = requireArguments().getString("encuestaTitulo")
+        //val cantMonedas: String? =
+          //  encuestaTitulo?.substringAfterLast(delimiter = "(", missingDelimiterValue = "Extension Not found")
+            //    ?.replace(")","")
 
+        //println("other message CANTIDAD MONEDAS " + cantMonedas)
         println("other message LLEGA A PREGUNTAS ENCUESTAS " + encuestaId + " " + encuestaTitulo)
         view.findViewById<TextView>(R.id.textViewPruebaID).text = encuestaTitulo
 
         // obtengo mail
         val userEmail = requireArguments().getString("email").toString()
+        //getCoinsFromFirebase(userEmail)
+
+
+        // al cargar el fragment va a buscar la info
+        // se dejo aca porque si se mueve la mierda esa no actualiza
+        db.collection("usuarios").document(userEmail).get().addOnSuccessListener {
+            coinsDelUsuario = it.get("monedas") as Long
+        }
 
         if (encuestaId != null) {
             obtenerPreguntas(view, encuestaId)
@@ -83,6 +97,7 @@ class SurveyFragment : Fragment() {
                 // el numero despues del == es siempre +1  la cantidad de preguntas
                 // es decir que si pongo == 11 son 10 preguntas
                 if (nroPregunta.toInt() == preguntas.size ){
+                    updateMonedas(email)
                     val miDialogView  = LayoutInflater.from(this.context).inflate(R.layout.survey_complete, null)
                     val mBuilder = AlertDialog.Builder(this.context).setView(miDialogView).setTitle("¡FELICITACIONES!")
                     miDialogView.findViewById<TextView>(R.id.textViewModal).text = "Completaste la encuesta y generaste " + coinsEnJuego + " coins!"
@@ -91,6 +106,12 @@ class SurveyFragment : Fragment() {
                         mAlertDialog.dismiss()
                         cerrarEncuesta(email)
                     }
+                    miDialogView.buttonShare.setOnClickListener(){
+                        val url = "https://api.whatsapp.com/send?phone=598111111&text=Prueba Pool of Polls y GANA!!!!"
+                        val i = Intent(Intent.ACTION_VIEW)
+                        i.data = Uri.parse(url)
+                        startActivity(i)
+                    }
                 }else{
                     setPregunta(view, encuestaId, nroPregunta.toInt() +1)
                 }
@@ -98,6 +119,22 @@ class SurveyFragment : Fragment() {
                 view.findViewById<TextView>(R.id.textViewRespVacia).visibility = View.VISIBLE
             }
         }
+    }
+    private fun updateMonedas(email: String){
+        var coinsFinal = coinsDelUsuario.toInt() + coinsEnJuego
+        db.collection("usuarios").document(email).set(
+            hashMapOf(
+                "monedas" to coinsFinal
+            )
+        )
+    }
+    private fun getCoinsFromFirebase(userEmail: String){
+        // al cargar el fragment va a buscar la info
+        println("other message coinsDelUsuario MAIL - " + userEmail)
+        db.collection("usuarios").document(userEmail).get().addOnSuccessListener {
+            //coinsDelUsuario = (it.get("monedas") as Long?).toString()
+        }
+        println("other message coinsDelUsuario coinsDelUsuario INICIOOOOO - " + coinsDelUsuario)
     }
     private fun obtenerPreguntas(view: View, encuestaId: String){
 
