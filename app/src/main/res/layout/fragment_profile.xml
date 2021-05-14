@@ -106,11 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
-        <TextView
-            android:id="@+id/textViewCoins"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="No tienes monedas! Comienza a generarlas!" />
+        
 
         <Space
             android:layout_width="match_parent"

@@ -122,11 +122,8 @@ class SurveyFragment : Fragment() {
     }
     private fun updateMonedas(email: String){
         var coinsFinal = coinsDelUsuario.toInt() + coinsEnJuego
-        db.collection("usuarios").document(email).set(
-            hashMapOf(
-                "monedas" to coinsFinal
-            )
-        )
+        db.collection("usuarios").document(email).update("monedas", coinsFinal)
+
     }
     private fun getCoinsFromFirebase(userEmail: String){
         // al cargar el fragment va a buscar la info
