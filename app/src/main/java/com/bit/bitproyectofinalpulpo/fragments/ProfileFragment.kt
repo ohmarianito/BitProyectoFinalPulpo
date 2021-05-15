@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.bit.bitproyectofinalpulpo.R
 import com.google.firebase.auth.FirebaseAuth
@@ -104,6 +105,13 @@ class ProfileFragment : Fragment() {
             view.findViewById<TextView>(R.id.editTextDate).text = fecha
             view.findViewById<TextView>(R.id.editTextCountry).text = pais
             view.findViewById<TextView>(R.id.editTextDepartment).text = depto
+            val ad =
+                AlertDialog.Builder(context!!)
+            ad.setTitle("Datos actualizados con éxito")
+            ad.setPositiveButton(
+                "OK"
+            ) { dialog, id -> dialog.dismiss() }
+            ad.show()
         }
     }
 }

@@ -32,6 +32,7 @@ class HomeActivity : AppCompatActivity() {
         val args = Bundle()
         //println("other message " + email)
         args.putString("email", email)
+        args.putBoolean("fromHome", true)
         profileFragment.arguments = args
         homeFragment.arguments = args
         storeFragment.arguments = args

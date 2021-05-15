@@ -198,6 +198,18 @@ class SurveyFragment : Fragment() {
                 "encuestaPreguntaOpcionId" to respuesta+1,
                 "usuarioId" to email)
         )
+        //guardo encuestas Completadas
+        when (encuestaId) {
+            "1" -> {
+                db.collection("usuarioEncuesta").document(email).update("encuestaUno", encuestaId)
+            }
+            "2" -> {
+                db.collection("usuarioEncuesta").document(email).update("encuestaDos", encuestaId)
+            }
+            else -> { // Note the block
+                db.collection("usuarioEncuesta").document(email).update("encuestaTres", encuestaId)
+            }
+        }
     }
 
     private fun cerrarEncuesta(email: String){

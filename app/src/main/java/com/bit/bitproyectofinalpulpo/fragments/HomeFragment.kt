@@ -18,7 +18,8 @@ class HomeFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
     var encuestas : HashMap<Int, String>
             = HashMap<Int, String> ()
-    var titulosEncuestas : ArrayList<String> = ArrayList()
+    var titulosEncuestas : MutableList<String> = mutableListOf()
+    var encuestasCompletadas : MutableList<Int> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +30,12 @@ class HomeFragment : Fragment() {
         val btnEncuesta  = view.findViewById<View>(R.id.buttonEncuesta) as Button
         // obtengo mail
         val userEmail = requireArguments().getString("email")
+        val fromHome = requireArguments().getBoolean("fromHome")
+        this.requireArguments().remove("fromHome")
+
 
         if (userEmail != null) {
+            iniciarEncuestasCompletadas(userEmail, fromHome)
             cargarEncuestas(userEmail)
         }
 
@@ -50,6 +55,32 @@ class HomeFragment : Fragment() {
 
         return view
     }
+    private fun iniciarEncuestasCompletadas(email: String, fromHome: Boolean){
+        if(fromHome){
+            db.collection("usuarioEncuesta").document(email).set(
+                hashMapOf(
+                    "encuestaUno" to 9,
+                    "encuestaDos" to 9,
+                    "encuestaTres" to 9
+                )
+            )
+        }else{
+            encuestasCompletadas.clear()
+            encuestas.clear()
+            titulosEncuestas.clear()
+            println("other message CANTIDADDDDDDDDDDDDDD " + encuestasCompletadas.count())
+            db.collection("usuarioEncuesta").document(email).get().addOnSuccessListener {
+                var valueUno = it.get("encuestaUno").toString().toInt()
+                var valueDos = it.get("encuestaDos").toString().toInt()
+                var valueTres = it.get("encuestaTres").toString().toInt()
+                encuestasCompletadas.add(valueUno)
+                encuestasCompletadas.add(valueDos)
+                encuestasCompletadas.add(valueTres)
+                println("other message VALORESSSSSSSSSsadasfsd43556354 " +  valueUno + " - " + valueDos  + " - " + valueTres)
+            }
+            println("other message CANTIDADDDDDDDDDDDDDD 222222222222 " + encuestasCompletadas.count())
+        }
+    }
     private fun cargarEncuestas(mail: String){
         var idEncuesta = 0
         var tituloEncuesta = ""
@@ -63,7 +94,11 @@ class HomeFragment : Fragment() {
                     tituloEncuesta = document.data["encuestaNombre"].toString()
                     cantMonedas =  document.data["encuestaMonedas"].toString()
                     println("other message VALORESSSS $idEncuesta - $tituloEncuesta"  )
-                    encuestas.put(idEncuesta, tituloEncuesta + " - ("  + cantMonedas + " coins)")
+                    println("other message ANTES VALIDAR" + encuestasCompletadas.count())
+                    if (!encuestasCompletadas.contains(idEncuesta)){
+                        println("other message METIOOOOO")
+                        encuestas.put(idEncuesta, tituloEncuesta + " - ("  + cantMonedas + " coins)")
+                    }
                 }
                 titulosEncuestas = ArrayList(encuestas.values)
                 mostrarEncuestas(mail)
