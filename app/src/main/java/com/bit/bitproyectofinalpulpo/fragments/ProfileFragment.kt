@@ -11,6 +11,7 @@ import com.bit.bitproyectofinalpulpo.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlin.system.exitProcess
 
 
 class ProfileFragment : Fragment() {
@@ -41,7 +42,7 @@ class ProfileFragment : Fragment() {
             FirebaseAuth.getInstance().signOut()
 
             //Como costo llegar a esta linea jaja
-            getActivity()?.onBackPressed();
+            //getActivity()?.onBackPressed();
 
             //esto redirige a actividad login pero no mata las capaz de abajo si le doy al boton back vuelve a la app
 
@@ -51,7 +52,7 @@ class ProfileFragment : Fragment() {
 
             // esto aca cierra app y mata todito es una bomba nuclear
 
-            // exitProcess(-1)
+            exitProcess(-1)
             println("other message   CERRO SESSION ")
         }
     }
